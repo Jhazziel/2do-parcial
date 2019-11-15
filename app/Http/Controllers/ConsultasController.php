@@ -53,5 +53,45 @@ class ConsultasController extends Controller
                         ->get();
     }
 
-    
+    public function consulta6 () {
+        return ArticulosPedido::join('articulos', 'articulos.id', '=', 'articulos_pedidos.idArticulo')
+                        ->selectRaw('`descripcion`, AVG(`cantidad`) as `Promedio de pedidos`')
+                        ->GroupBy('articulos.descripcion')
+                        ->get();
+    }
+
+    public function consulta7 (Request $request) {
+        return Direcciones::join('pedidos', 'pedidos.idDireccion', '=', 'direcciones.id')
+                        ->select('pedidos.id as `Numero de pedido`', 'fecha')
+                        ->where('direcciones.ciudad', '=', $request->ciudad)
+                        ->get();
+    }
+
+    public function consulta8 (Request $request) {
+        return Articulos::join('existencias', 'existencias.idArticulo', '=', 'articulos.id')
+                        ->join('fabricas', 'fabricas.id', '=', 'existencias.idFabrica')
+                        ->select('fabricas.id as num_fabrica', 'articulos.id as num_articulo', 'articulos.descripcion', 'existencias.cantidad')
+                        ->where('fabricas.id', '=', $request->id)
+                        ->where('existencias.cantidad', '>', 0)
+                        ->get();
+    }
+
+    public function consulta9 () {
+        return Clientes::join('direcciones', 'direcciones.idCliente', '=', 'clientes.id')
+                        ->select('nombre')
+                        ->whereRaw('`direcciones`.`id` not in(select `pedidos`.`idDireccion` from `direcciones` join `pedidos` on `pedidos`.`idDireccion` = `direcciones`.`id`)')
+                        ->get();
+    }
+
+    public function consulta10 () {
+        return Direcciones::max('count(*)');
+    }
+
+    public function consulta11 () {
+        return Clientes::max('descuento');
+    }
+
+    public function consulta12 () {
+        return Pedidos::count();
+    }
 }

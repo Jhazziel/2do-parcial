@@ -40,7 +40,7 @@ class clienteSedeer extends Seeder
             DB::table('existencias')->insert([
                 'idArticulo' => rand(1, 10),
                 'idFabrica' => rand(1, 3),
-                'cantidad' => rand(0, 1000),
+                'cantidad' => rand(0, 1000) ? $i != 0 && $i%2 != 0 : 0,
             ]);
         }
 
