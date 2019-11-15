@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Clientes;
 use App\Direcciones;
 use App\Pedidos;
@@ -84,7 +85,22 @@ class ConsultasController extends Controller
     }
 
     public function consulta10 () {
-        return Direcciones::max('count(*)');
+
+        //tengo problemas al generar esta consulta con eloquent
+        //el enunciado es el siguiente: 
+        // - Mostrar la ciudad con más clientes
+        //
+        //la consulta es compleja, con puro comando seria de la siguiente manera:
+        //
+        // - select ciudad, MAX(contador) 'cantidad clientes' from (select ciudad, count(*) as contador from direcciones group by ciudad) as tabla1
+        //
+        //el problema reside en el hecho de que no tengo idea de como hacer un select a una tabla creada en la misma consulta
+        //por ejemplo para una consulta select simple con eloquent, como:
+        //
+        //$tabla = Direcciones::all();
+        //
+        //eloquent obtiene el argumento para FROM de Direcciones, pero lo que necesito hacer es crear una tabla dentro de la misma consulta,
+        //mediante un select, y esa tabla recien generada utilizala como argumento para el FROM, cosa que no supe como hacer :(
     }
 
     public function consulta11 () {
